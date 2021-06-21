@@ -7,11 +7,13 @@ import {
   setSearchedUsers,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
+import {Cookies} from 'react-cookie';
+
+const cookies = new Cookies();
 
 axios.interceptors.request.use(async function (config) {
-  const token = await localStorage.getItem("messenger-token");
+  const token = cookies.cookies["messenger-token"];
   config.headers["x-access-token"] = token;
-
   return config;
 });
 
@@ -35,7 +37,8 @@ export const fetchUser = () => async (dispatch) => {
 export const register = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/register", credentials);
-    await localStorage.setItem("messenger-token", data.token);
+    // await localStorage.setItem("messenger-token", data.token);
+    await cookies.set('messenger-token', data.token)
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -47,7 +50,8 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
-    await localStorage.setItem("messenger-token", data.token);
+    // await localStorage.setItem("messenger-token", data.token);
+    await cookies.set('messenger-token', data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -59,7 +63,8 @@ export const login = (credentials) => async (dispatch) => {
 export const logout = (id) => async (dispatch) => {
   try {
     await axios.delete("/auth/logout");
-    await localStorage.removeItem("messenger-token");
+    // await localStorage.removeItem("messenger-token");
+    await cookies.remove("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
   } catch (error) {
@@ -71,6 +76,7 @@ export const logout = (id) => async (dispatch) => {
 
 export const fetchConversations = () => async (dispatch) => {
   try {
+    console.log(cookies)
     const { data } = await axios.get("/api/conversations");
     dispatch(gotConversations(data));
   } catch (error) {
