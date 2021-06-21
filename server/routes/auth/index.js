@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
+const { setCookies } = require("../utils");
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -26,6 +27,7 @@ router.post("/register", async (req, res, next) => {
       process.env.SESSION_SECRET,
       { expiresIn: 86400 }
     );
+    setCookies(res, token);
     res.json({
       ...user.dataValues,
       token,
@@ -64,6 +66,7 @@ router.post("/login", async (req, res, next) => {
         process.env.SESSION_SECRET,
         { expiresIn: 86400 }
       );
+      setCookies(res, token);
       res.json({
         ...user.dataValues,
         token,
@@ -75,6 +78,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
+  res.clearCookie("token");
   res.sendStatus(204);
 });
 
