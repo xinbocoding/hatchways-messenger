@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { Grid, CssBaseline, Button } from "@material-ui/core";
+import { Grid, CssBaseline, Button, AppBar, Toolbar, Typography } from "@material-ui/core";
 import { SidebarContainer } from "./Sidebar";
 import { ActiveChat } from "./ActiveChat";
 import { logout, fetchConversations } from "../store/utils/thunkCreators";
@@ -11,6 +11,13 @@ import { clearOnLogout } from "../store/index";
 const styles = {
   root: {
     height: "97vh",
+    marginTop: '6%'
+  },
+  appbar: {
+    flexGrow: 1
+  },
+  title: {
+    flexGrow: 1,
   },
 };
 
@@ -48,9 +55,16 @@ class Home extends Component {
     return (
       <>
         {/* logout button will eventually be in a dropdown next to username */}
-        <Button className={classes.logout} onClick={this.handleLogout}>
-          Logout
-        </Button>
+        <div className={classes.appbar}>
+          <AppBar position="fixed" color="inherit">
+            <Toolbar>
+              <Typography variant="h6" className={classes.title}>
+                Chat Room
+              </Typography>
+              <Button onClick={this.handleLogout}>Logout</Button>
+            </Toolbar>
+          </AppBar>
+        </div>
         <Grid container component="main" className={classes.root}>
           <CssBaseline />
           <SidebarContainer />
