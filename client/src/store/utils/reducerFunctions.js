@@ -1,3 +1,54 @@
+export const addConversationToStore = (_, payload) => {
+  return payload.map((convo) => {
+    convo.unreadCount = countUnreadMessages(convo);
+
+    return convo;
+  });
+};
+
+const countUnreadMessages = (convo) => {
+  const otherUserId = convo.otherUser.id;
+  const readTime = new Date(
+    convo.otherUser.id === convo.user1Id
+      ? convo.user2ReadTime
+      : convo.user1ReadTime
+  );
+  let unReadCount = 0;
+
+  convo.messages.forEach((message) => {
+    if (
+      message.senderId === otherUserId &&
+      new Date(message.createdAt) > readTime
+    ) {
+      unReadCount++;
+    }
+  });
+
+  return unReadCount;
+};
+
+export const setReadTimeToStore = (state, payload) => {
+  const { recipientId, conversationId, readTime } = payload;
+
+  return state.map((convo) => {
+    if (convo.id === conversationId) {
+      const convoCopy = { ...convo };
+
+      if (convo.user1Id === recipientId) {
+        convoCopy.user2ReadTime = readTime;
+      } else {
+        convoCopy.user1ReadTime = readTime;
+      }
+
+      convoCopy.unreadCount = 0;
+
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo

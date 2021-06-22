@@ -5,9 +5,10 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  setReadTime,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
-import {Cookies} from 'react-cookie';
+import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
 
@@ -38,7 +39,7 @@ export const register = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/register", credentials);
     // await localStorage.setItem("messenger-token", data.token);
-    await cookies.set('messenger-token', data.token)
+    await cookies.set("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -51,7 +52,7 @@ export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
     // await localStorage.setItem("messenger-token", data.token);
-    await cookies.set('messenger-token', data.token);
+    await cookies.set("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -74,9 +75,21 @@ export const logout = (id) => async (dispatch) => {
 
 // CONVERSATIONS THUNK CREATORS
 
+export const updateReadTime = (body) => (dispatch) => {
+  const conversation = {
+    ...body,
+    readTime: new Date().toISOString(),
+  };
+
+  axios
+    .post("/api/updateReadTime", conversation)
+    .then(() => dispatch(setReadTime(conversation)))
+    .catch((err) => console.log(err));
+};
+
 export const fetchConversations = () => async (dispatch) => {
   try {
-    console.log(cookies)
+    console.log(cookies);
     const { data } = await axios.get("/api/conversations");
     dispatch(gotConversations(data));
   } catch (error) {
@@ -85,7 +98,10 @@ export const fetchConversations = () => async (dispatch) => {
 };
 
 const saveMessage = async (body) => {
-  const { data } = await axios.post("/api/messages", body);
+  const { data } = await axios.post("/api/messages", {
+    ...body,
+    readTime: Date.now(),
+  });
   return data;
 };
 

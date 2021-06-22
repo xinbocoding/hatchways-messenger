@@ -1,23 +1,38 @@
 import React from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import { SenderBubble, OtherUserBubble } from "../ActiveChat";
 import moment from "moment";
 
+const useStyle = makeStyles((theme) => ({
+  messageBox: {
+    maxHeight: "70vh",
+    overflow: "auto",
+  },
+}));
+
 const Messages = (props) => {
+  const classes = useStyle();
   const { messages, otherUser, userId } = props;
 
   return (
-    <Grid container direction="column">
-      {messages.map((message) => {
-        const time = moment(message.createdAt).format("h:mm");
+    <div className={classes.messageBox}>
+      <Grid container direction="column">
+        {messages.map((message) => {
+          const time = moment(message.createdAt).format("h:mm");
 
-        return (message.senderId === userId ? (
-          <SenderBubble key={message.id} text={message.text} time={time} />
-        ) : (
-          <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
-        ));
-      })}
-    </Grid>
+          return message.senderId === userId ? (
+            <SenderBubble key={message.id} text={message.text} time={time} />
+          ) : (
+            <OtherUserBubble
+              key={message.id}
+              text={message.text}
+              time={time}
+              otherUser={otherUser}
+            />
+          );
+        })}
+      </Grid>
+    </div>
   );
 };
 
