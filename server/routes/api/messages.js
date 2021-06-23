@@ -31,7 +31,15 @@ router.post("/", async (req, res, next) => {
       if (onlineUsers.includes(sender.id)) {
         sender.online = true;
       }
+      //check if conversation exists and matches the request id
+    } else if (conversation && conversation.id === conversationId) {
+      const message = await Message.create({ senderId, text, conversationId });
+      return res.json({ message, sender });
+      //if conversation exists but request id doesn't match conversation's, return 400 not found
+    } else if (conversation && conversation.id !== conversationId) {
+      return res.sendStatus(400);
     }
+    
     const message = await Message.create({
       senderId,
       text,
