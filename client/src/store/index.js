@@ -33,4 +33,3 @@ export default createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(thunkMiddleware, loggerMiddleware)),
 );
-
