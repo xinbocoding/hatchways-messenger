@@ -21,12 +21,6 @@ const useStyle = makeStyles(() => ({
 }));
 
 const Home = (props) => {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     isLoggedIn: false,
-  //   };
-  // }
   const classes = useStyle();
 
   const { logout, fetchConversations } = props;
@@ -41,34 +35,9 @@ const Home = (props) => {
     setIsLoggedIn(true);
   }, [user.id]);
 
-  // componentDidMount() {
-  //   this.props.fetchConversations();
-  // }
-
   const handleLogout = async () => {
     await logout(user.id);
   };
-
-  // render() {
-  //   if (!this.props.user.id) {
-  //     // If we were previously logged in, redirect to login instead of register
-  //     if (this.state.isLoggedIn) return <Redirect to="/login" />;
-  //     return <Redirect to="/register" />;
-  //   }
-  //   return (
-  //     <>
-  //       {/* logout button will eventually be in a dropdown next to username */}
-  //       <Button className={classes.logout} onClick={this.handleLogout}>
-  //         Logout
-  //       </Button>
-  //       <Grid container component="main" className={classes.root}>
-  //         <CssBaseline />
-  //         <SidebarContainer />
-  //         <ActiveChat />
-  //       </Grid>
-  //     </>
-  //   );
-  // }
 
   return (
     <>

@@ -18,12 +18,6 @@ const useStyle = makeStyles(() => ({
 }));
 
 const Input = (props) => {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     text: "",
-  //   };
-  // }
   const classes = useStyle();
   const [text, setText] = useState("");
 
@@ -31,9 +25,6 @@ const Input = (props) => {
 
   const handleChange = (event) => {
     setText(event.target.value)
-    // this.setState({
-    //   text: event.target.value,
-    // });
   };
 
   const handleSubmit = async (event) => {

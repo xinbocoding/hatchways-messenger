@@ -41,24 +41,6 @@ const Chat = (props) => {
       <ChatContent conversation={conversation} />
     </Box>
   );
-  // render() {
-  //   const { classes } = this.props;
-  //   const otherUser = this.props.conversation.otherUser;
-  //   return (
-  //     <Box
-  //       onClick={() => this.handleClick(this.props.conversation)}
-  //       className={classes.root}
-  //     >
-  //       <BadgeAvatar
-  //         photoUrl={otherUser.photoUrl}
-  //         username={otherUser.username}
-  //         online={otherUser.online}
-  //         sidebar={true}
-  //       />
-  //       <ChatContent conversation={this.props.conversation} />
-  //     </Box>
-  //   );
-  // }
 };
 
 const mapDispatchToProps = (dispatch) => {
