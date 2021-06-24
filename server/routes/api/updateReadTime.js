@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
 
   if (!recipientId || !conversationId || !readTime) return res.sendStatus(400);
 
-  let updateTime = await Conversation.findConversation(senderId, recipientId)
+  let findConversation =  Conversation.findConversation(senderId, recipientId)
     .then((conversation) => {
       if (!conversation) throw new Error("undable to find a conversation");
       else if (conversation.id !== conversationId)
@@ -26,9 +26,9 @@ router.post("/", async (req, res) => {
     })
     .catch((err) => console.log(err));
 
-  if (updateTime.error) res.sendStatus(400);
+  if (findConversation.error) res.sendStatus(400);
 
-  res.json(updateTime);
+  res.json(findConversation);
 });
 
 module.exports = router;

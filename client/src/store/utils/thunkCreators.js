@@ -75,16 +75,15 @@ export const logout = (id) => async (dispatch) => {
 
 // CONVERSATIONS THUNK CREATORS
 
-export const updateReadTime = (body) => (dispatch) => {
+export const updateReadTime = (body) => async (dispatch) => {
   const conversation = {
     ...body,
     readTime: new Date().toISOString(),
   };
 
-  axios
-    .post("/api/updateReadTime", conversation)
-    .then(() => dispatch(setReadTime(conversation)))
-    .catch((err) => console.log(err));
+  await axios.post("/api/updateReadTime", conversation);
+  dispatch(setReadTime(conversation));
+  
 };
 
 export const fetchConversations = () => async (dispatch) => {
