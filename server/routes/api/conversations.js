@@ -68,6 +68,7 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser.online = false;
       }
 
+      convoJSON.unreadCount = countUnreadMessages(convoJSON);
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
       conversations[i] = convoJSON;
@@ -78,5 +79,26 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+const countUnreadMessages = (convo) => {
+  const otherUserId = convo.otherUser.id;
+  const readTime = new Date(
+    convo.otherUser.id === convo.user1Id
+      ? convo.user2ReadTime
+      : convo.user1ReadTime
+  );
+  let unReadCount = 0;
+
+  convo.messages.forEach((message) => {
+    if (
+      message.senderId === otherUserId &&
+      new Date(message.createdAt) > readTime
+    ) {
+      unReadCount++;
+    }
+  });
+
+  return unReadCount;
+};
 
 module.exports = router;

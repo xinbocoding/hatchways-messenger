@@ -1,32 +1,3 @@
-export const addConversationToStore = (_, payload) => {
-  return payload.map((convo) => {
-    convo.unreadCount = countUnreadMessages(convo);
-
-    return convo;
-  });
-};
-
-const countUnreadMessages = (convo) => {
-  const otherUserId = convo.otherUser.id;
-  const readTime = new Date(
-    convo.otherUser.id === convo.user1Id
-      ? convo.user2ReadTime
-      : convo.user1ReadTime
-  );
-  let unReadCount = 0;
-
-  convo.messages.forEach((message) => {
-    if (
-      message.senderId === otherUserId &&
-      new Date(message.createdAt) > readTime
-    ) {
-      unReadCount++;
-    }
-  });
-
-  return unReadCount;
-};
-
 export const setReadTimeToStore = (state, payload) => {
   const { recipientId, conversationId, readTime } = payload;
 
