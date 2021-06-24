@@ -1,7 +1,7 @@
 const onlineUsers = {};
 
 const checkOnlineUser = (userId) => {
-  return onlineUsers.hasOwnProperty(userId);
+  return !!onlineUsers[userId];
 };
 
 const addOnlineUser = (userId, socketId) => {
