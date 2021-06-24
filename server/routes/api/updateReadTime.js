@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {Conversation} = require("../../db/models");
 
-router.post("/", async (req, res) => {
+router.put("/", async (req, res) => {
   if (!req.user) {
     return res.sendStatus(401);
   }
