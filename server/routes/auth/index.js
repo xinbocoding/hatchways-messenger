@@ -78,7 +78,9 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
-  res.clearCookie('messenger-token', { httpOnly: true });
+  res.clearCookie("messenger-token", {
+    domain: 'localhost', path: '/'
+  });
   res.sendStatus(204);
 });
 
