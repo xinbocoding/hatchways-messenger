@@ -23,8 +23,12 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
   },
   formButton: {
-    height: 60,
-    width: 160,
+    height: 70,
+    width: 200,
+    fontSize: 20,
+    fontWeight: 800,
+    marginTop: '9%',
+    marginLeft: '30%'
   },
   navBox: {
     display: "flex",
@@ -37,10 +41,10 @@ const useStyles = makeStyles((theme) => ({
   formBox: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    marginLeft: '20%'
   },
   formContainer: {
-    display: "flex",
+    height:600,
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -52,11 +56,11 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 60,
   },
   formTextField: {
-    width: "90%",
-  },
-  form: {
     width: "100%",
   },
+  form: {
+    width: '70%'
+  }
 }));
 
 const Login = (props) => {
@@ -135,6 +139,7 @@ const Login = (props) => {
                   variant="contained"
                   color="primary"
                   size="large"
+                  className={classes.formButton}
                 >
                   Login
                 </Button>

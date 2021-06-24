@@ -24,24 +24,28 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
   },
   formButton: {
-    height: 60,
-    width: 160,
+    height: 70,
+    width: 200,
+    fontSize: 20,
+    fontWeight: 800,
+    marginTop: "5%",
+    marginLeft: "30%",
   },
   navBox: {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingLeft:10,
+    paddingLeft: 10,
     paddingTop: 40,
     paddingRight: 40,
   },
   formBox: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    marginLeft: "20%",
   },
   formContainer: {
-    display: "flex",
+    height: 600,
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -53,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 60,
   },
   formTextField: {
-    width: "90%",
+    width: "100%",
   },
   form: {
-    width: '100%'
+    width: "70%",
   },
 }));
 
@@ -134,10 +138,13 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
               <Grid item>
-                <FormControl error={!!formErrorMessage.confirmPassword} className={classes.formTextField}>
+                <FormControl
+                  error={!!formErrorMessage.confirmPassword}
+                  className={classes.formTextField}
+                >
                   <TextField
-                    aria-label="password"
                     label="Password"
+                    aria-label="Password"
                     type="password"
                     inputProps={{ minLength: 6 }}
                     name="password"
@@ -148,8 +155,11 @@ const Login = (props) => {
                   </FormHelperText>
                 </FormControl>
               </Grid>
-              {/* <Grid item>
-                <FormControl error={!!formErrorMessage.confirmPassword} className={classes.formTextField}>
+              <Grid item>
+                <FormControl
+                  error={!!formErrorMessage.confirmPassword}
+                  className={classes.formTextField}
+                >
                   <TextField
                     label="Confirm Password"
                     aria-label="confirm password"
@@ -162,8 +172,14 @@ const Login = (props) => {
                     {formErrorMessage.confirmPassword}
                   </FormHelperText>
                 </FormControl>
-              </Grid> */}
-              <Button type="submit" variant="contained" color="primary" size="large">
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.formButton}
+              >
                 Create
               </Button>
             </Grid>
