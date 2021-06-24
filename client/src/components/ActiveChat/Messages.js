@@ -1,5 +1,5 @@
-import React from "react";
-import { Grid, makeStyles } from "@material-ui/core";
+import React, { useRef, useEffect } from "react";
+import { Box, makeStyles } from "@material-ui/core";
 import { SenderBubble, OtherUserBubble } from "../ActiveChat";
 import moment from "moment";
 
@@ -12,6 +12,19 @@ const useStyle = makeStyles((theme) => ({
 
 const Messages = (props) => {
   const classes = useStyle();
+
+  const { messages, otherUser, userId } = props;
+
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages]);
+
   const { messages, otherUser, userId } = props;
 
   let lastMsgReadIdx = messages

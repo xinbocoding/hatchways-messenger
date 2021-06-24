@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -8,7 +8,13 @@ import { ActiveChat } from "./ActiveChat";
 import { logout, fetchConversations } from "../store/utils/thunkCreators";
 import { clearOnLogout } from "../store/index";
 
-const styles = {
+// const styles = {
+//   root: {
+//     height: "97vh",
+//   },
+// };
+
+const useStyle = makeStyles(() => ({
   root: {
     height: "97vh",
     marginTop: '6%'
@@ -19,40 +25,34 @@ const styles = {
   title: {
     flexGrow: 1,
   },
-};
+}));
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-    };
-  }
+const Home = (props) => {
+  const classes = useStyle();
 
-  componentDidUpdate(prevProps) {
-    if (this.props.user.id !== prevProps.user.id) {
-      this.setState({
-        isLoggedIn: true,
-      });
-    }
-  }
+  const { logout, fetchConversations } = props;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = props.user || {};
 
-  componentDidMount() {
-    this.props.fetchConversations();
-  }
+  useEffect(() => {
+    fetchConversations();
+  }, []);
 
-  handleLogout = async () => {
-    await this.props.logout(this.props.user.id);
+  useEffect(() => {
+    setIsLoggedIn(true);
+  }, [user.id]);
+
+  const handleLogout = async () => {
+    await logout(user.id);
   };
 
-  render() {
-    const { classes } = this.props;
-    if (!this.props.user.id) {
-      // If we were previously logged in, redirect to login instead of register
-      if (this.state.isLoggedIn) return <Redirect to="/login" />;
-      return <Redirect to="/register" />;
-    }
-    return (
+  return (
+    <>
+      {!user.id && (
+        <>
+          {isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/register" />}
+        </>
+      )}
       <>
         {/* logout button will eventually be in a dropdown next to username */}
         <div className={classes.appbar}>
@@ -71,9 +71,9 @@ class Home extends Component {
           <ActiveChat />
         </Grid>
       </>
-    );
-  }
-}
+    </>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -94,7 +94,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(Home));
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
