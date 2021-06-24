@@ -19,10 +19,10 @@ router.get("/", async (req, res, next) => {
           user2Id: userId,
         },
       },
-      attributes: ["id"],
-      order: [[Message, "createdAt", "DESC"]],
+      attributes: ["id", "user1Id", "user2Id", "user1ReadTime", "user2ReadTime"],
+      order: [[Message, "createdAt", "ASC"]],
       include: [
-        { model: Message, order: ["createdAt", "DESC"] },
+        { model: Message },
         {
           model: User,
           as: "user1",
@@ -68,8 +68,9 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser.online = false;
       }
 
+      convoJSON.unreadCount = countUnreadMessages(convoJSON);
       // set properties for notification count and latest message preview
-      convoJSON.latestMessageText = convoJSON.messages[0].text;
+      convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
       conversations[i] = convoJSON;
     }
 
@@ -78,5 +79,26 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+const countUnreadMessages = (convo) => {
+  const otherUserId = convo.otherUser.id;
+  const readTime = new Date(
+    convo.otherUser.id === convo.user1Id
+      ? convo.user2ReadTime
+      : convo.user1ReadTime
+  );
+  let unReadCount = 0;
+
+  convo.messages.forEach((message) => {
+    if (
+      message.senderId === otherUserId &&
+      new Date(message.createdAt) > readTime
+    ) {
+      unReadCount++;
+    }
+  });
+
+  return unReadCount;
+};
 
 module.exports = router;

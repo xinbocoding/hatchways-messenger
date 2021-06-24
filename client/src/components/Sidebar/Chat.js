@@ -3,6 +3,7 @@ import { Box, makeStyles } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { updateReadTime } from "../../store/utils/thunkCreators";
 
 const useStyle = makeStyles(() => ({
   root: {
@@ -47,6 +48,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
+    },
+    updateReadTime: (conversation) => {
+      dispatch(updateReadTime(conversation));
     },
   };
 };

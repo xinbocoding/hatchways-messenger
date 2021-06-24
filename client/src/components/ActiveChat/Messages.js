@@ -25,14 +25,30 @@ const Messages = (props) => {
     scrollToBottom()
   }, [messages]);
 
+  const { messages, otherUser, userId } = props;
+
+  let lastMsgReadIdx = messages
+    .slice()
+    .reverse()
+    .filter((message) => message.senderId === userId);
+  
+  const lastMsgReadId = lastMsgReadIdx[0].id;
+
   return (
     <div className={classes.messageBox}>
-      <Box>
+      <Grid container direction="column">
         {messages.map((message) => {
           const time = moment(message.createdAt).format("h:mm");
 
           return message.senderId === userId ? (
-            <SenderBubble key={message.id} text={message.text} time={time} />
+            <SenderBubble
+              key={message.id}
+              text={message.text}
+              time={time}
+              otherUser={otherUser}
+              lastMsgReadId={lastMsgReadId}
+              msgId={message.id}
+            />
           ) : (
             <OtherUserBubble
               key={message.id}
@@ -42,8 +58,7 @@ const Messages = (props) => {
             />
           );
         })}
-      </Box>
-      <div ref={messagesEndRef} />
+      </Grid>
     </div>
   );
 };
